@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opara Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-700">
+
+  <div class="text-center">
+    <!-- Title -->
+    <h1 class="text-2xl font-bold mb-4 text-gray-50">Simple Calculator</h1>
+
+    <!-- Calculator Container -->
+    <div class="border-2 border-gray-700 p-6 rounded-lg bg-gray-700 inline-block drop-shadow-lg w-80">
+      
+      <!-- Display -->
+      <div id="display" class="bg-gray-200 rounded-lg h-12 mb-4 flex items-center justify-end px-3 text-2xl shadow-inner">
+        0
+      </div>
+
+      <!-- Buttons Grid -->
+      <div class="grid grid-cols-4 gap-2">
+        <!-- Row 1 -->
+        <button onclick="clearDisplay()" class="bg-red-400 rounded-lg p-4 text-lg font-semibold hover:bg-red-200">AC</button>
+        <button onclick="deleteLast()" class="bg-red-400 rounded-lg p-4 text-lg font-semibold hover:bg-red-200">CE</button>
+        <button onclick="inputValue('%')" class="bg-gray-400 rounded-lg p-4 text-lg font-semibold hover:bg-gray-200">%</button>
+        <button onclick="inputValue('/')" class="bg-gray-400 rounded-lg p-4 text-lg font-bold hover:bg-gray-200">&divide;</button>
+
+        <!-- Row 2 -->
+        <button onclick="inputValue('7')" class="bg-gray-200 rounded-lg p-4 text-lg font-semibold hover:bg-gray-300">7</button>
+        <button onclick="inputValue('8')" class="bg-gray-200 rounded-lg p-4 text-lg font-semibold hover:bg-gray-300">8</button>
+        <button onclick="inputValue('9')" class="bg-gray-200 rounded-lg p-4 text-lg font-semibold hover:bg-gray-300">9</button>
+        <button onclick="inputValue('*')" class="bg-gray-400 rounded-lg p-4 text-lg font-semibold hover:bg-gray-200">x</button>               
+
+        <!-- Row 3 -->
+        <button onclick="inputValue('4')" class="bg-gray-200 rounded-lg p-4 text-lg font-semibold hover:bg-gray-300">4</button>
+        <button onclick="inputValue('5')" class="bg-gray-200 rounded-lg p-4 text-lg font-semibold hover:bg-gray-300">5</button>
+        <button onclick="inputValue('6')" class="bg-gray-200 rounded-lg p-4 text-lg font-semibold hover:bg-gray-300">6</button>
+        <button onclick="inputValue('-')" class="bg-gray-400 rounded-lg p-4 text-lg font-semibold hover:bg-gray-200">-</button>
+        
+        <!-- Row 4 -->
+        <button onclick="inputValue('1')" class="bg-gray-200 rounded-lg p-4 text-lg font-semibold hover:bg-gray-300">1</button>
+        <button onclick="inputValue('2')" class="bg-gray-200 rounded-lg p-4 text-lg font-semibold hover:bg-gray-300">2</button>
+        <button onclick="inputValue('3')" class="bg-gray-200 rounded-lg p-4 text-lg font-semibold hover:bg-gray-300">3</button>
+        <button onclick="inputValue('+')" class="bg-gray-400 rounded-lg p-4 text-lg font-semibold hover:bg-gray-200">+</button>
+        <!-- Row 5 -->
+        <button onclick="inputValue('.')" class="bg-gray-200 rounded-lg p-4 text-lg font-semibold hover:bg-gray-300">.</button>        
+        <button onclick="inputValue('0')" class="bg-gray-200 rounded-lg p-4 text-lg font-semibold hover:bg-gray-300">0</button>
+        <button onclick="calculateResult()" class="bg-gray-400 rounded-lg p-4 text-lg font-semibold col-span-2 hover:bg-gray-200">=</button>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let display = document.getElementById('display'); // Finds the HTML element with id="display" so you can show text on the calculator screen
+    let currentValue = ''; // A string that holds whatever the user has typed so far (e.g., "12+7").
+
+    // Called when you press any digit or operator button
+    function inputValue(value) {
+      if (currentValue === '0' || display.innerText === '0') {
+        currentValue = '';  // If the screen currently shows 0, wipe it so the next input replaces the zero (prevents things like 012).
+      }
+      currentValue += value; // Append the pressed character to the expression.
+                            //  Example: pressing 1, 2, + makes currentValue go "" → "1" → "12" → "12+".
+      display.innerText = currentValue; // Update the calculator screen to show the new expression.
+    }
+
+    function clearDisplay() {
+      currentValue = '';
+      display.innerText = '0'; // After pressing AC, it Reset the display to show 0 and your expression buffer is empty.
+    }
+
+    function deleteLast() {
+      currentValue = currentValue.slice(0, -1); // Removes the last character from the current value
+      display.innerText = currentValue || '0'; // If nothing is left, show 0 on the display
+    }
+
+    // Evaluating the expression when = is pressed.
+    function calculateResult() {
+      try {
+        currentValue = eval(currentValue.replace('%', '/100')).toString(); // converts a single % to “divide by 100”. And .toString() converts the numeric result back to a string for display.
+        display.innerText = currentValue;
+      } catch {
+        display.innerText = 'Error'; // If the expression is invalid (like "1++2"), it shows "Error" on the display.
+      }
+    }
+
+  </script>
+
+</body>
+</html>
